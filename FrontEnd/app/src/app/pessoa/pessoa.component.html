@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <style>
+                button{
+                margin: 0 15px;
+            }
+            table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            }
+
+            td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            }
+
+            tr:nth-child(even) {
+            background-color: #dddddd;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="row">
+            <br>    
+            <div class="col-sm-6" *ngIf="pessoaSelecionada">
+                <div *ngIf="pessoaSelecionada.pessoaId == 0">
+                    <div class="row">
+                        <div class="mr-auto">
+                            <h3>   CADASTRO PESSOA  </h3>
+                            <button (click)="voltar()" type="button" class="btn btn-info">Voltar</button>
+                        </div>
+                   
+                    </div>
+                </div>
+                <div *ngIf="pessoaSelecionada.pessoaId != 0">
+                    <div class="row">
+                        <div class="mr-auto">
+                            <h3> ALTERAR PESSOA  </h3>
+                            <button (click)="voltar()" type="button" class="btn btn-info">Voltar</button>
+                        </div>               
+                    </div>
+                </div>         
+                <br>    
+                <form [formGroup]= "pessoaForm" (submit)="pessoaSubmit()">
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input type="text" class="form-control" formControlName="nome">             
+                    </div>
+                    <div class="form-group">
+                        <label>Cpf</label>
+                        <input type="text" class="form-control" formControlName="cpf">             
+                    </div>
+                    <div class="form-group">
+                        <label>Idade</label>
+                        <input type="text" class="form-control" formControlName="idade">             
+                    </div>
+                  <div *ngIf="pessoaSelecionada.pessoaId != 0">
+                    <div class="form-group">
+                        <label>Cidade</label>
+                        <input type="text" class="form-control" value="{{nomeCidade}}" disabled="" >
+                    </div>
+                  </div>
+                  <div  *ngIf="pessoaSelecionada.pessoaId == 0">
+                    <div class="form-group">
+                        <br>
+                        <label>Cidade:  </label>
+                        <select (change)="changeCidade($event)">
+                            <option> -----Selecione------</option>
+                            <option [value]="listaCidades.cidadeId" *ngFor="let listaCidades of cidadeList" > 
+                                {{listaCidades.nome}}
+                            </option>
+                        </select>
+                    </div>                     
+                </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <button type="button" class="btn btn-danger" (click)="deletePessoa(pessoaSelecionada.pessoaId)">Deletar</button>
+                </form>
+            </div>
+    
+            <div [ngClass]="{'col-sm-6': pessoaSelecionada, 'col-sm-12': !pessoaSelecionada}" >
+                <br>
+                <h3>{{title}}</h3>
+                <div class="col-lg-12" style="text-align: right;">
+                    <button type="button" class="btn btn-primary" (click)="cadastroPessoa()" >Cadastrar Pessoa</button>
+                </div>
+                <br>
+                <table>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>Cpf</th>
+                        <th>Idade</th>
+                        <th>Cidade</th>
+                        <th>Ação</th>
+                    </tr>
+                    <tr *ngFor="let lista of pessoaList" style="cursor: pointer;" (click)="pessoaSelect(lista)" >              
+                        <td scope="row">{{lista.pessoaId}}</td>
+                        <td>{{lista.nome}}</td>
+                        <td>{{lista.cpf}}</td>   
+                        <td>{{lista.idade}}</td>   
+                        <td>{{lista.cidadeId}}</td>                 
+                        <div class="btn-group" >
+                            <button class="btn btn-sm btn-warning" (click)="pessoaSelect(pessoaSelecionada)" >Editar</button>
+                        </div>
+                    </tr>           
+                </table>
+            </div>
+        </div >
+    </body>
+</html>
